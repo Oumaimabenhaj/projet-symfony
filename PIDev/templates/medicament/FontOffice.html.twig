@@ -1,0 +1,292 @@
+{% extends 'baseF.html.twig' %}
+{% block body %}
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/bootstrap.min.css')}}">
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick-theme.css')}}">
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/nouislider.min.css')}}">
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="{{asset('front/fontOffice/css/font-awesome.min.css')}}">
+
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="{{asset('front/fontOffice/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('front/fontOffice/mdb/css/mdb.min.css') }}">
+
+    <style>
+    .rating {
+        font-size: 15px;
+        cursor: pointer;
+        direction: rtl;
+        unicode-bidi: bidi-override; /* Ajoutez cette ligne pour inverser la direction des étoiles */
+    }
+
+    .rating span {
+        color: #E4E7ED;
+        display: inline-block;
+        font-family: FontAwesome;
+        content: "\f006";
+    }
+
+    .rating span:hover,
+    .rating span:hover ~ span {
+        color: #1D7EB6;
+    }
+    .product-image {
+        width: 100px; /* Remplacez 100px par la largeur souhaitée */
+        height: 100px; /* Remplacez 100px par la hauteur souhaitée */
+        /* Vous pouvez également ajouter d'autres styles comme object-fit pour contrôler le comportement de redimensionnement */
+        object-fit: cover;
+    }
+</style>
+
+    
+  
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb" class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+             <!-- SEARCH BAR -->
+             	
+                        <div class="col-md-12">
+							<div class="header-search">
+                           
+									{{ form_start(form) }}
+                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                   {{ form_widget(form.nom, {'attr': {'class': 'input', 'placeholder': '    🔍      Rechercher...'}}) }}
+                                    {{ form_end(form) }}
+							</div>
+			            </div>
+             <!-- /SEARCH BAR -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /BREADCRUMB -->
+
+    <!-- SECTION -->
+    <div class="section">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- ASIDE -->
+                <div id="aside" class="col-md-3">
+                    <!-- aside Widget -->
+                    <div class="aside">
+                        <h3 class="aside-title">Categories</h3>
+                        <div class="checkbox-filter">
+    {% for k in listCategorie %}
+        <div class="input-checkbox">
+            <input type="checkbox" id="category-{{ k.id }}" class="category-checkbox" data-category="{{ k.id }}">
+            <label for="category-{{ k.id }}">
+                <span></span>
+                {{ k.getNomCat() }}
+                <small>(120)</small>
+            </label>
+        </div>
+    {% endfor %}
+</div>
+                    </div>
+                    <!-- /aside Widget -->
+                </div>
+                <!-- /ASIDE -->
+
+                <!-- STORE -->
+                <div id="store" class="col-md-9">
+                    <!-- store top filter -->
+                    <div class="store-filter clearfix">
+                        <div class="store-sort">
+                            <label>
+                               <h3 class="title">Liste des médicaments</h3>
+                            </label>
+                            
+                        </div>
+                        <ul class="store-grid">
+                            <li class="active"><i class="fa fa-th"></i></li>
+                            <li><a href="#"><i class="fa fa-th-list"></i></a></li>
+                        </ul>
+                    </div>
+                    <!-- /store top filter -->
+
+                    <!-- store products -->
+<div class="row">
+    <!-- Section -->
+    <!-- row -->
+    <div class="row">
+        {% for med in list %}
+            <!-- product -->
+            <div class="col-md-3 col-xs-6" data-category="{{ med.getCategorie().getId() }}">
+                <div class="product">
+                    <div class="product-img">
+                        <img class="product-image" src="{{asset('uploads/'~med.getImage()) }}">
+                        <div class="product-label">
+                            <span class="sale">{{ med.getEtat() }}</span>
+                        </div>
+                    </div>
+                    <div class="product-body">
+                        <p class="product-category">{{ med.getRefMed() }}</p>
+                        <h3 class="product-name"><a href="#">{{ med.getNomMed() }}</a></h3>
+                        <div class="rating" data-rating="3">
+                            <span data-value="1" onclick="rateStar(1)"><i class="fa fa-star"></i></span>
+                            <span data-value="2" onclick="rateStar(2)"><i class="fa fa-star"></i></span>
+                            <span data-value="3" onclick="rateStar(3)"><i class="fa fa-star"></i></span>
+                            <span data-value="4" onclick="rateStar(4)"><i class="fa fa-star"></i></span>
+                            <span data-value="5" onclick="rateStar(5)"><i class="fa fa-star"></i></span>
+                        </div>
+                        <div class="product-btns">
+                            <button class="add-to-wishlist"><i class="fa fa-thumbs-up"></i><span
+                                    class="tooltipp">J'aime</span></button>
+                            <button class="quick-view"><i class="fa fa-thumbs-down"></i><span
+                                    class="tooltipp">J'aime pas</span></button>
+                        </div>
+                    </div>
+                    <div class="add-to-cart">
+                        <button class="add-to-cart-btn"><i class="fa fa-eye"></i> <a
+                                href={{ path('app_show',{'id':med.id})}}> Voir details</a>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- /product -->
+        {% endfor %}
+    </div>
+    <!-- /row -->
+</div>
+<!-- /store products -->
+
+                 
+                </div>
+                <!-- /STORE -->
+            </div>
+            <!-- /row -->
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- /SECTION -->
+<div class="row">
+    <div class="col d-flex justify-content-center">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                {% for page in 1..totalPages %}
+                    <li class="page-item {% if page == currentPage %}active{% endif %}">
+                        <a class="page-link" href="{{ path('app_medicament1', {'page': page}) }}">{{ page }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </div>
+</div>
+    <!-- Start Newsletter Area -->
+    <section class="newsletter section">
+        <div class="container">
+            <div class="row ">
+                <div class="col-lg-6 col-12">
+                    <!-- Start Newsletter Form -->
+                    <div class="subscribe-text ">
+                        <h6>Inscrivez-vous </h6>
+                        <p class="">
+
+Avec qui il est habituel de partager une vie urbaine. Il est inexpérimenté dans son approche, Homère l'autre."</p>
+                    </div>
+                    <!-- End Newsletter Form -->
+                </div>
+                <div class="col-lg-6 col-12">
+                    <!-- Start Newsletter Form -->
+                    <div class="subscribe-form ">
+                        <form action="mail/mail.php" method="get" target="_blank" class="newsletter-inner">
+                            <input name="EMAIL" placeholder="Your email address" class="common-input"
+                                onfocus="this.placeholder = ''" onblur="this.placeholder = 'Your email address'" required=""
+                                type="email">
+                            <button class="btn">Subscribe</button>
+                        </form>
+                        <ul class="newsletter-follow">
+                            <li>
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-pinterest"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- End Newsletter Form -->
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /End Newsletter Area -->
+    <script src="{{asset('front/fontOffice/js/jquery.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/slick.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/nouislider.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/jquery.zoom.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/main.js')}}"></script>
+   <script>
+    function rateStar(value) {
+        // Mettre à jour la valeur de notation dans l'attribut 'data-rating'
+        document.querySelector('.rating').setAttribute('data-rating', value);
+
+        // Mettre à jour le style des étoiles
+        const stars = document.querySelectorAll('.rating span');
+        stars.forEach((star, index) => {
+            if (index < value) {
+                star.style.color = '#1D7EB6';  // Couleur des étoiles sélectionnées
+            } else {
+                star.style.color = '#E4E7ED';  // Couleur des étoiles non sélectionnées
+            }
+        });
+
+        // Vous pouvez également envoyer la valeur sélectionnée au serveur via une requête AJAX
+        // en utilisant la variable 'value'
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkboxes = document.querySelectorAll('.category-checkbox');
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                filterProducts();
+            });
+        });
+
+        function filterProducts() {
+            const selectedCategories = Array.from(checkboxes)
+                .filter(function (checkbox) {
+                    return checkbox.checked;
+                })
+                .map(function (checkbox) {
+                    return checkbox.getAttribute('data-category');
+                });
+
+            const products = document.querySelectorAll('.col-md-3.col-xs-6');
+
+            products.forEach(function (product) {
+                const productCategory = product.getAttribute('data-category');
+
+                if (selectedCategories.length === 0 || selectedCategories.includes(productCategory)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        }
+    });
+</script>
+   
+
+{% endblock %}

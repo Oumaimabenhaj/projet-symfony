@@ -1,0 +1,150 @@
+{% extends 'baseF.html.twig' %}
+{% block body %}
+<!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/bootstrap.min.css')}}">
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick.css')}}">
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/slick-theme.css')}}">
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="{{asset('front/fontOffice/css/nouislider.min.css')}}">
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="{{asset('front/fontOffice/css/font-awesome.min.css')}}">
+
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="{{asset('front/fontOffice/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('front/fontOffice/mdb/css/mdb.min.css') }}">
+<style>
+        .custom-title-style {
+            /* Add your custom styles here */
+            color: #1D7EB6; /* Example: Red text color */
+            font-size: 24px; /* Example: 24px font size */
+			font-weight: bold;
+			font-family: "Times New Roman";
+            /* Add other styles as needed */
+        }
+    </style>
+
+<div class="section">
+			<!-- container -->
+			<div class="container">
+			<div class="row">
+        <div class="col-md-12 text-center">
+            <div class="store-filter clearfix">
+                <div class="store-sort">
+                    <label>
+                        <b><h3 class="title custom-title-style">Détails médicaments</h3></b>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+				<!-- row -->
+				<div class="row">
+					<!-- Product main img -->
+					<div class="col-md-5 col-md-push-2">
+						<div id="product-main-img">
+							<div class="product-preview">
+								 <img class="product-image" src="{{asset('uploads/'~list.getImage()) }}">
+							</div>
+
+							
+						</div>
+					</div>
+					<!-- /Product main img -->
+
+					<!-- Product thumb imgs -->
+					<div class="col-md-2  col-md-pull-5">
+						<div id="product-imgs">
+							<div class="product-preview">
+							 <img class="product-image" src="{{asset('uploads/'~list.getImage()) }}">
+							</div>
+
+							
+						</div>
+					</div>
+					<!-- /Product thumb imgs -->
+
+					<!-- Product details -->
+					<div class="col-md-5">
+						<div class="product-details">
+							<h2 class="product-name">{{ list.getNomMed() }}</h2>
+							<div>
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								
+							</div>
+							<br>
+							
+						    <span class="product-available">Etat : {{ list.getEtat() }}</span>
+							
+							<br>
+							<ul class="product-links">
+							<li>Réference : {{ list.getRefMed() }}<li>
+							</ul>
+							
+							<ul class="product-links">
+								<li>Category:</li>
+								<li><a href="#">{{ list.getCategorie() is not null ? list.getCategorie().getNomCat() : 'Not available' }}</a></li>
+							</ul>
+
+							<ul class="product-links">
+								<li>Share:</li>
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
+							</ul>
+
+						</div>
+					</div>
+					<!-- /Product details -->
+
+					<!-- Product tab -->
+				<div class="col-md-12">
+    <div id="product-tab">
+        <!-- product tab nav -->
+        <ul class="tab-nav">
+            <li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
+        </ul>
+        <!-- /product tab nav -->
+
+        <!-- product tab content -->
+        <div class="tab-content">
+            <!-- tab1  -->
+            <div id="tab1" >
+                <div class="row">
+                    <div class="col-md-12">
+                        <p>{{ list.getDescription() }}</p>
+                    </div>
+                </div>
+            </div>
+            <!-- /tab1  -->
+        </div>
+        <!-- /product tab content  -->
+    </div>
+</div>
+
+					<!-- /product tab -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+<script src="{{asset('front/fontOffice/js/jquery.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/slick.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/nouislider.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/jquery.zoom.min.js')}}"></script>
+    <script src="{{asset('front/fontOffice/js/main.js')}}"></script>
+
+{% endblock %}

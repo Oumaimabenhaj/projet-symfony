@@ -1,0 +1,103 @@
+{% extends 'baseF.html.twig' %}
+
+
+{% block body %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+               
+      <!-- partial -->
+      <div class="main-panel">
+  <div class="content-wrapper">
+    <div class="row">
+      <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h1 style="text-align: center" class="card-title">Modifier des Rendez-vous</h1>
+
+            {{ form_start(form, {'attr': {'novalidate': 'novalidate' , 'enctype': 'multipart/form-data'}}) }}
+
+            <div class="form-group row">
+              <label for="daterendezvous" class="col-sm-3 col-form-label">Date du rendez-vous</label>
+              <div class="col-sm-9">
+                {{ form_widget(form.daterendezvous, {'attr': {'class': 'form-control','placeholder': 'heure du rendez-vous' }}) }}
+                {{ form_errors(form.daterendezvous) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="heurerendezvous" class="col-sm-3 col-form-label">Heure du rendez-vous</label>
+              <div class="col-sm-9">
+                {{ form_widget(form.heurerendezvous, {'attr': {'class': 'form-control', 'placeholder': 'heure du rendez-vous'}}) }}
+                {{ form_errors(form.heurerendezvous) }}
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label for="description" class="col-sm-3 col-form-label">Description</label>
+              <div class="col-sm-9">
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'placeholder': 'description de votre Rendez-vous'}}) }}
+              </div>
+            </div>
+               <div>  {{ form_errors(form.description) }}</div>
+               </div>
+
+
+              
+
+            <div class="form-group row">
+              <div class="col-sm-9 offset-sm-3 text-center">
+                {{ form_row(form.Ajouter, {'attr': {'class': 'btn btn-primary'}}) }}
+              </div>
+            </div>
+
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- content-wrapper ends -->
+        <!-- partial:../../partials/_footer.html -->
+      
+        <!-- partial -->
+      </div>
+      <!-- main-panel ends -->
+    </div>
+    </div>
+   {% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    {# SweetAlert2 success message #}
+    {% for flashMessage in app.flashes('success') %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Modifier!',
+                text: '{{ flashMessage }} 👍',
+                showConfirmButton: true,
+                confirmButtonText: 'Great! 😊',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ path('app_afficherRendezVous') }}';
+                }
+            });
+        </script>
+    {% endfor %}
+
+    {% for flashMessage in app.flashes('error') %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ flashMessage }} 😞',
+                showConfirmButton: true,
+                confirmButtonText: 'OK! 👌',
+                timer: 1500,
+            });
+        </script>
+    {% endfor %}
+{% endblock %}
+
+{% endblock %}

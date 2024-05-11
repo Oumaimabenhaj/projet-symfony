@@ -1,0 +1,174 @@
+{% extends 'baseB.html.twig' %}
+
+{% block body %}
+    <h1>Emplois du temps</h1>
+
+    <link href="path/to/bootstrap.min.css" rel="stylesheet">
+    <link href="path/to/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.css" integrity="sha256-uq9PNlMzB+1h01Ij9cx7zeE2OR2pLAfRw3uUUOOPKdA=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.0/main.min.js" integrity="sha256-DBxkGZLxKsLKhz054qUpBqtotG00r9AELGpSigJujLg=" crossorigin="anonymous"></script>
+    <div id="calendrier"></div>
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let calendarElt = document.querySelector("#calendrier");
+            let calendar = new FullCalendar.Calendar(calendarElt, {
+                
+                allDaySlot: false,
+                initialView: 'dayGridMonth',
+                locale: 'fr',  
+                timeZone: 'Africa/Tunis',
+                headerToolbar: {
+                    left: 'prev,next today',    
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: {{ data|raw }},
+                eventContent: function(info) {
+                    return {
+                        html: `<div class="fc-content">
+                                    <div class="fc-content">${info.event.extendedProps.titre}</div>
+                                    <div class="fc-content">${info.event.extendedProps.description}</div>
+                                    <div class="fc-content">
+                                        <button class="btn btn-danger btn-sm delete-event" data-event-id="${info.event.id}">Delete</button>
+                                    </div>
+                                </div>`
+                    };
+                },
+                editable: true,
+                eventResizableFromStart: true
+            });
+
+            calendar.on('eventChange', (e) => {
+                let url = `/editEmploi/${e.event.id}/edit`;
+                let donnees = {
+                    "titre": e.event.extendedProps.titre,
+                    "start": e.event.start,
+                    "end": e.event.end,
+                    "description": e.event.extendedProps.description,
+                };
+                console.log(donnees);
+                let xhr = new XMLHttpRequest();
+                xhr.open("PUT", url);
+                xhr.send(JSON.stringify(donnees));
+            });
+
+            calendarElt.addEventListener('click', function (event) {
+                if (event.target.classList.contains('delete-event')) {
+                    let eventId = event.target.getAttribute('data-event-id');
+                    // Swal fire alert
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Are you sure?',
+                        text: 'You won\'t be able to revert this!',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            calendar.getEventById(eventId).remove();
+
+                            fetch(`/deleteEmploi/${eventId}`, {
+                                method: 'DELETE',
+                            }).then(response => {
+                                if (response.ok) {
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Your event has been deleted.',
+                                        'success'
+                                    );
+                                } else {
+                                    // Handle error
+                                    console.error('Failed to delete event');
+                                    Swal.fire(
+                                        'Error!',
+                                        'Failed to delete event.',
+                                        'error'
+                                    );
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+    <!-- Your existing script and style links... -->
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    #calendrier {
+        width: 80%; /* Adjust the width to your preference */
+        margin: auto;
+    }
+
+    #calendrier .fc-header-toolbar .fc-button {
+        background-color: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+    #calendrier .fc-header-toolbar .fc-button:hover {
+        background-color: #0056b3;
+        color: #fff;
+        border-color: #0056b3;
+    }
+
+    #calendrier .fc-content {
+        font-size: 1em;
+        font-weight: bold;
+        background-color: #007bff; 
+        color: #fff; 
+        padding: 5px;
+        border-radius: 5px;
+        text-align: center; 
+    }
+
+    #calendrier .fc-description {
+        font-size: 0.8em;
+    }
+
+    .custom-delete-button {
+        background-color: red;
+        color: #fff;
+        border-color: red;
+    }
+</style>
+{% endblock %}
+
+{% block javascript %}
+    {% for flashMessage in app.flashes('success') %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Ajouter!',
+                text: '{{ flashMessage }} ðŸ‘',
+                showConfirmButton: true,
+                confirmButtonText: 'Great! ðŸ˜Š',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ path('app_afficherRendezVous') }}';
+                }
+            });
+        </script>
+    {% endfor %}
+
+    {% for flashMessage in app.flashes('error') %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: '{{ flashMessage }} ðŸ˜ž',
+                showConfirmButton: true,
+                confirmButtonText: 'OK! ðŸ‘Œ',
+            });
+        </script>
+    {% endfor %}
+{% endblock %}
+{% endblock %}

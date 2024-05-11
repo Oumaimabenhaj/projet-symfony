@@ -1,0 +1,116 @@
+{% extends 'baseF.html.twig' %}
+
+
+
+{% block body %}
+          <!-- Include Font Awesome in your HTML file -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+      <nav class="sidebar sidebar-offcanvas" id="sidebar" style="background-color: DodgerBlue; color: white; ">
+        <ul class="nav">
+          
+          
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
+              <i class="icon-columns menu-icon"></i>
+              <span class="menu-title">Gérer Emploi</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="form-elements">
+              <ul class="nav flex-column sub-menu" >
+                <li class="nav-item"><a class="nav-link" href="{{path('app_addEmploi')}}">Ajouter Emploi</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{path('app_calendar')}}">Consulter liste des emplois</a></li>
+              </ul>
+            </div>
+          </li>
+         
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
+              <i class="icon-paper menu-icon"></i>
+              <span class="menu-title">Gérer Rendez vous</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="auth">
+              <ul class="nav flex-column sub-menu">
+              <!-- aaa remplir -->
+                <li class="nav-item"> <a class="nav-link" href="{{ path('app_addRendezvous')}}"> Ajouter Rendez-vous </a></li>
+                
+              </ul>
+            </div>
+          </li>
+         
+        </ul>
+      </nav>
+<div class="main-panel">        
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 style="text-align: center;background-color: DodgerBlue; color: white;" class="card-title">Liste des Rendez-vous</h1>
+                        <div class="container">
+    <div class="row">
+        {% for rdv in list %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-header" style="background-color: DodgerBlue; color: white;">
+                        Rendez-vous #{{ rdv.id }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Date:</strong> {{ rdv.daterendezvous | date('Y-m-d')}}</p>
+                        <p class="card-text"><strong>Heure:</strong> {{ rdv.heurerendezvous| date('H:i:s') }}</p>
+                        <p class="card-text"><strong>Description:</strong> {{ rdv.description }}</p>
+                      <p class="card-text"><strong>Statut :</strong> {{ rdv.etat == 0 ? '<i class="fas fa-check-circle" style="color: green;"></i> Accepted' : '<i class="fas fa-times-circle" style="color: red;"></i> Rejected' }}</p>
+
+                        <p class="card-text">
+                            {% if rdv.file %}
+                            <div style="border: 2px solid #3498db; background-color: #ecf0f1; color: #3498db; padding: 10px; border-radius: 5px; cursor: pointer;">
+                                <a href="{{ asset('uploads/' ~ rdv.file) }}" download="{{ rdv.file }}">
+                                    <i class="fas fa-file"></i> Lettre de Liaison
+                                </a>
+                                </div>
+                            {% else %}
+                                <i class="fas fa-ban"></i> No file
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a class="btn btn-lg" href="{{ path('app_editRendezvous', {'id': rdv.id}) }}">Edit</a>
+                        <a class="btn btn-lg" href="{{ path('app_deleteRendezvous', {'id': rdv.id}) }}">Delete</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- content-wrapper ends -->
+    <!-- partial:../../partials/_footer.html -->
+    <!-- Ajoutez ici le code du pied de page si nécessaire -->
+    <!-- partial -->
+</div>
+</div>
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    {% for flashMessage in app.flashes('success') %}
+        <script>
+            Swal.fire({
+                icon: 'info',
+                title: '🗑️Deleted',
+                text: '{{ flashMessage }} ',
+                showConfirmButton: true,
+                confirmButtonText: 'Great! 😊',
+             }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '{{ path('app_afficherRendezVous') }}';
+                }
+            });
+        </script>
+    {% endfor %}
+{% endblock %}
+{% endblock %}
