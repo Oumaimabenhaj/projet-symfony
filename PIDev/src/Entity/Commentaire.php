@@ -42,7 +42,7 @@ class Commentaire
     private ?Blog $idblog = null;
 
     #[ORM\ManyToOne(inversedBy: 'commentaires')]
-    private ?Admin $idadmin = null;
+    private ?GlobalUser $idadmin = null;
     #[ORM\OneToMany(mappedBy: 'commentaire', targetEntity: Like::class, cascade: ['remove'])]
     private Collection $likes;
 
@@ -191,12 +191,12 @@ class Commentaire
         return $this;
     }
 
-    public function getIdadmin(): ?admin
+    public function getIdadmin(): ?GlobalUser
     {
         return $this->idadmin;
     }
 
-    public function setIdadmin(?admin $idadmin): static
+    public function setIdadmin(?GlobalUser $idadmin): static
     {
         $this->idadmin = $idadmin;
 

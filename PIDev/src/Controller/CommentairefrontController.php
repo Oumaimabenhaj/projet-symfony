@@ -7,7 +7,7 @@ use App\Form\CommentaireType;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Security;
 
-use App\Entity\Admin;
+use App\Entity\GlobalUser;
 use App\Entity\Blog;
 use App\Entity\Commentaire;
 use Doctrine\Persistence\ManagerRegistry;
@@ -56,7 +56,7 @@ class CommentairefrontController extends AbstractController
     public function jaime(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {        
         $commentaire = $entityManager->getRepository(Commentaire::class)->find($id);
-        $admin = $entityManager->getRepository(Admin::class)->find(3); 
+        $admin = $entityManager->getRepository(GlobalUser::class)->find(3); 
 
         if (!$commentaire) {
             throw $this->createNotFoundException('Commentaire non trouvé');
@@ -78,7 +78,7 @@ class CommentairefrontController extends AbstractController
     public function neJaimePas(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {        
         $commentaire = $entityManager->getRepository(Commentaire::class)->find($id);
-        $admin = $entityManager->getRepository(Admin::class)->find(3);
+        $admin = $entityManager->getRepository(GlobalUser::class)->find(3);
 
         if (!$commentaire) {
             throw $this->createNotFoundException('Commentaire non trouvé');
@@ -162,7 +162,7 @@ public function addCommentairefront($id, Request $request, Security $security): 
     if ($form->isSubmitted() && $form->isValid()) {
         // Récupérer l'utilisateur connecté (avec l'ID 3)
         $adminId = 3; // ID de l'admin statiquement défini à 3
-        $user = $this->getDoctrine()->getRepository(Admin::class)->find($adminId);
+        $user = $this->getDoctrine()->getRepository(GlobalUser::class)->find($adminId);
         if (!$user) {
             throw $this->createNotFoundException('Admin non trouvé avec l\'identifiant '.$adminId);
         }
@@ -251,7 +251,7 @@ public function like($id, EntityManagerInterface $entityManager): Response
         $commentaire->setNblike($commentaire->getNblike() + 1);
         $like = new Like();
         $like->setCommentaire($commentaire);
-        $user = $entityManager->getRepository(Admin::class)->find(3);
+        $user = $entityManager->getRepository(GlobalUser::class)->find(3);
         $like->setUserr($user);
         $entityManager->persist($like);
 
@@ -284,7 +284,7 @@ public function dislike($id, EntityManagerInterface $entityManager): Response
         $commentaire->setNbdislike($commentaire->getNbdislike() + 1);
         $dislike = new Dislike();
         $dislike->setCommentaire($commentaire);
-        $user = $entityManager->getRepository(Admin::class)->find(3);
+        $user = $entityManager->getRepository(GlobalUser::class)->find(3);
         $dislike->setUserr($user);
         $entityManager->persist($dislike);
 

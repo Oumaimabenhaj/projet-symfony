@@ -56,7 +56,7 @@ class Blog
     private ?Categorieblogs $categorieblogs = null;
 
     #[ORM\ManyToOne(inversedBy: 'blogs')]
-    private ?Admin $idadmin = null;
+    private ?GlobalUser $idadmin = null;
 
     public function __construct()
     {
@@ -202,12 +202,12 @@ class Blog
         return $this;
     }
 
-    public function getIdadmin(): ?Admin
+    public function getIdadmin(): ?GlobalUser
     {
         return $this->idadmin;
     }
 
-    public function setIdadmin(?Admin $idadmin): static
+    public function setIdadmin(?GlobalUser $idadmin): static
     {
         $this->idadmin = $idadmin;
 
